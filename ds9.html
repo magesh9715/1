@@ -1,0 +1,66 @@
+<pre>
+    #include &lt;stdio.h&gt;
+    #include &lt;limits.h&gt;
+    #define MAX 100
+                   
+    int minDistance(int distance[], int visited[], int numVertices) {
+        int min, minIndex,v;
+        min = INT_MAX; minIndex=-1;
+        for (v = 0; v < numVertices; v++) {
+            if (!visited[v] && distance[v] <= min) {
+                min = distance[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+    
+    void dijkstra(int graph[MAX][MAX], int numVertices, int source) {
+        int distance[MAX], visited[MAX];
+        int i,count,u,v;
+        for (i = 0; i < numVertices; i++) {
+            distance[i] = INT_MAX;
+            visited[i] = 0;
+        }
+        distance[source] = 0;
+    
+        for (count = 0; count < numVertices - 1; count++) {
+            u = minDistance(distance, visited, numVertices);
+            visited[u] = 1;
+    
+            for (v = 0; v < numVertices; v++) {
+                if (!visited[v] && graph[u][v] && distance[u] != INT_MAX &&
+                    distance[u] + graph[u][v] < distance[v]) {
+                    distance[v] = distance[u] + graph[u][v];
+                }
+            }
+        }
+    
+        printf("Vertex\tDistance from Source\n");
+        for (i = 0; i < numVertices; i++) {
+            printf("%d\t%d\n", i, distance[i]);
+        }
+    }
+    
+    int main() {
+        int graph[MAX][MAX];
+        int numVertices, source, i, j;
+    
+        printf("Enter the number of vertices: ");
+        scanf("%d", &numVertices);
+    
+        printf("Enter the adjacency matrix (enter 0 for no edge):\n");
+        for (i = 0; i < numVertices; i++) {
+            for (j = 0; j < numVertices; j++) {
+                scanf("%d", &graph[i][j]);
+            }
+        }
+    
+        printf("Enter the source vertex (0 to %d): ", numVertices - 1);
+        scanf("%d", &source);
+    
+        dijkstra(graph, numVertices, source);
+    
+        return 0;
+    }
+</pre>
